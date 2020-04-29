@@ -1,4 +1,5 @@
 const transactionUl = document.querySelector("#transactions");
+const incomeDisplay = document.querySelector("#money-plus");
 
 const dummyTransactions = [
 	{id: 1, name:"Bolo de brigadeiro", amount:-20 },
@@ -31,7 +32,10 @@ const updateBalanceValues = () => {
 		.filter( value => value > 0 )
 		.reduce((accumulator, value) => accumulator + value, 0) // obtendo o valor total das receitas
 		.toFixed(2);
-	console.log(income);
+	const expense = transactionsAmounts.filter(value => value < 0) //obtendo valores negativo
+		.reduce((accumulator, value) => accumulator + value, 0) // somando os valores negativos
+		.toFixed(2);
+	console.log(expense);
 
 }
 
