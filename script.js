@@ -2,6 +2,9 @@ const transactionUl = document.querySelector("#transactions");
 const incomeDisplay = document.querySelector("#money-plus");
 const expenseDisplay = document.querySelector("#money-minus");
 const balanceDisplay = document.querySelector("#balance");
+const form = document.querySelector("#form");
+const inputTransactionName = document.querySelector("#text");
+const inputTransactionAmount = document.querySelector("#amount");
 
 const dummyTransactions = [
 	{id: 1, name:"Bolo de brigadeiro", amount:-20 },
@@ -34,8 +37,8 @@ const updateBalanceValues = () => {
 		.filter( value => value > 0 )
 		.reduce((accumulator, value) => accumulator + value, 0) // obtendo o valor total das receitas
 		.toFixed(2);
-	const expense = transactionsAmounts.filter(value => value < 0) //obtendo valores negativo
-		.reduce((accumulator, value) => accumulator + value, 0) // somando os valores negativos
+	const expense = Math.abs( transactionsAmounts.filter(value => value < 0) //obtendo valores negativo
+		.reduce((accumulator, value) => accumulator + value, 0)) // somando os valores negativos
 		.toFixed(2);
 	
 		balanceDisplay.textContent = `R$ ${total}`
@@ -46,9 +49,35 @@ const updateBalanceValues = () => {
 
 
 const init =()=> {
+	transactionUl.innerHTML = "";
 	dummyTransactions.forEach(addTransactionIntoDOM);
 	updateBalanceValues();
 
 }
 
 init();
+
+const generateID = () => Math.round(Math.random() *1000);
+
+form.addEventListener("submit", event =>{
+	event.preventDefault();
+
+	const transactionName = inputTransactionName.value.trim();
+	const transactionAmount = inputTransactionAmount.value.trim();
+
+	if (transactionName === ""  || transactionAmount === ""){
+		alert("É preciso preencher nome e valor para cada transação");
+		return
+	}
+	const transaction = {
+	id: generateID(),
+	name: transactionName,
+	amount: Number(transactionAmount) 
+}
+
+dummyTransactions.push(transaction)
+init()
+
+inputTransactionName.value = "";
+inputTransactionAmount.value = "";
+});
